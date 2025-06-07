@@ -103,8 +103,10 @@ client.on('message_create', async (msg) => {
     try {
         if (msg.fromMe || msg.isStatus) return;
 
-        if (msg.body.startsWith('!ask ')) {
-            const userInput = msg.body.substring(5).trim();
+        const bodyLower = msg.body.toLowerCase();
+
+        if (bodyLower.startsWith('!ask ')) {
+            const userInput = msg.body.substring('!ask '.length).trim();
             if (!userInput) {
                 await msg.reply("Please provide a question after `!ask `.");
                 return;
@@ -123,8 +125,8 @@ client.on('message_create', async (msg) => {
                 await thinkingMessage.edit("Sorry, I couldn't get an answer. Please try again.");
             }
 
-        } else if (msg.body.startsWith('!image ')) {
-            const userInput = msg.body.substring(7).trim();
+        } else if (bodyLower.startsWith('!image ')) {
+            const userInput = msg.body.substring('!image '.length).trim();
             if (!userInput) {
                 await msg.reply("Please provide a prompt after `!image `.");
                 return;
@@ -186,9 +188,14 @@ client.on('message_create', async (msg) => {
                 }
                 await generatingMessage.edit(detailedError);
             }
-        } else if (msg.body.startsWith('!sticker')) {
-            const commandArgs = msg.body.substring('!sticker'.length).trim();
-            const stickerText = commandArgs;
+        } else if (bodyLower.startsWith('!sticker')) {
+            let stickerText = '';
+            if (bodyLower.startsWith('!sticker ')) {
+                stickerText = msg.body.substring('!sticker '.length).trim();
+            } else {
+                 stickerText = msg.body.substring('!sticker'.length).trim();
+            }
+
 
             let mediaToProcess = null;
 
@@ -285,7 +292,7 @@ client.on('message_create', async (msg) => {
                     }
                 });
             }
-        } else if (msg.body.trim() === '!help') {
+        } else if (msg.body.trim().toLowerCase() === '!help') {
             const helpHeader = `This is a WhatsApp bot created by ${STICKER_AUTHOR}\n` +
                                `GitHub: ${GITHUB_LINK}\n` +
                                `Thanks for using it!\n` +
@@ -310,7 +317,14 @@ client.on('message_create', async (msg) => {
                 `Bot created by ${STICKER_AUTHOR}\n` +
                 `${GITHUB_LINK}`;
 
-            await msg.reply(helpMessage);
+            try {
+                await msg.reply(helpMessage);
+            } catch (replyError) {
+                try {
+                    await msg.reply("Sorry, I couldn't display the full help message. Basic commands: !ask, !image, !sticker, !help.");
+                } catch (fallbackError) {
+                }
+            }
         }
     } catch (error) {
         if (msg && typeof msg.reply === 'function' && !msg.isStatus && msg.body) {
