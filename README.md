@@ -1,123 +1,82 @@
-# WhatsApp Bot by RadjaShiqnals
+# WhatsApp Gemini Bot
 
-This project is a WhatsApp bot created by [RadjaShiqnals](https://github.com/RadjaShiqnals).
-The bot integrates with Google's Gemini AI to provide responses to user queries and generate images directly within WhatsApp.
+A simple WhatsApp bot that uses Google's Gemini AI for conversational responses and image generation, plus some fun sticker-making features.
 
-## Bot Functionality
+## Features
 
-The bot listens for specific commands in WhatsApp messages:
+-   **AI Chat**: Talk to the bot by mentioning it in a group or sending a direct message.
+-   **Ask Command**: Use `!ask` to get a direct answer from the Gemini Pro model.
+-   **Image Generation**: Use `!image` to generate images from text descriptions using the Gemini Pro Vision model.
+-   **Sticker Creator**: Use `!sticker` to create stickers from images.
 
-*   **`!ask {user input}`**: Takes the user's input, sends it to the Gemini AI (`gemini-1.5-flash-latest` model) for a text-based answer, and replies directly to the user's message.
-*   **`!image {user input}`**: Takes the user's input as a prompt, sends it to the Gemini AI (using the `gemini-2.0-flash-preview-image-generation` model), generates an image, and sends it back to the user.
-*   **`!sticker {optional text}`**: Converts an image or GIF into a WhatsApp sticker. 
-    *   You can either send an image/GIF with the command or reply to a message containing an image/GIF with the command.
-    *   If you provide text after `!sticker` (e.g., `!sticker Hello World`), and the media is a static image (not a GIF), the text will be added to the bottom of the image before converting it to a sticker. Text cannot be added to animated GIFs.
+## Commands
 
-*   **`!help`**: Displays a list of available commands, their descriptions, and usage instructions.
+-   `!ping`
+    -   Checks if the bot is running. Responds with "pong".
 
-The bot is designed to handle multiple users simultaneously.
+-   `!ask {prompt}`
+    -   Asks a question to the Gemini AI.
+    -   Example: `!ask What is the capital of Australia?`
 
-## Setup and Running Instructions
+-   `!image {prompt}`
+    -   Generates an AI image based on the provided text prompt.
+    -   Example: `!image a photo of a racoon programming a computer`
 
-### Prerequisites
+-   `!sticker {image_url} [text] [--options]`
+    -   Creates a sticker from a direct image URL.
+    -   If you add text, it will be placed on the image, meme-style.
+    -   **Simple Sticker**: `!sticker https://i.imgur.com/example.png`
+    -   **Sticker with Text**: `!sticker https://i.imgur.com/example.png This is my meme`
+    -   **Customized Text Sticker**: You can customize the text's color, size, and position.
+        -   `--color`: Text color name or hex code (e.g., `red`, `#FFFF00`). Default is `white`.
+        -   `--size`: Font size in pixels (e.g., `40`). Default is `50`.
+        -   `--pos`: Text position (`top`, `center`, `bottom`). Default is `bottom`.
+        -   Example: `!sticker {url} TOP TEXT --pos=top --color=yellow --size=45`
 
-*   Node.js (v16+ recommended)
-*   npm (comes with Node.js)
-*   A Google Gemini API Key
+-   `!help`
+    -   Shows a list of all available commands.
 
-### General Setup (Windows & Linux)
+## Installation
 
-1.  **Clone the Repository** (if you haven't already):
+1.  **Clone the repository:**
     ```bash
-    # If you have this project in a Git repository
-    # git clone <repository-url>
-    # cd whatsapp_bot
+    git clone https://github.com/your-username/whatsapp-gemini-bot.git
+    cd whatsapp-gemini-bot
     ```
 
-2.  **Create `.env` File**:
-    Copy the contents of `.env.example` into a new file named `.env` in the root directory (`d:\Project Coding\whatsapp_bot`).
-    Replace `"YOUR_GEMINI_API_KEY"` with your actual Gemini API Key.
-    ```env
-    // File: .env
-    GEMINI_API_KEY="YOUR_ACTUAL_GEMINI_API_KEY"
-    ```
-
-3.  **Install Dependencies**:
-    Open your terminal or command prompt in the project directory (`d:\Project Coding\whatsapp_bot`) and run:
+2.  **Install dependencies:**
     ```bash
     npm install
     ```
+    > **Note for Windows users:** The `canvas` package might require some additional build tools. If you run into issues, follow the instructions on the [node-canvas wiki](https://github.com/Automattic/node-canvas/wiki/Installation:-Windows). You may need to install `windows-build-tools`.
+    > `npm install --global --production windows-build-tools`
 
-### Running the Bot
+3.  **Set up your environment variables:**
+    -   Create a `.env` file in the root directory.
+    -   Add your Google Gemini API key to the `.env` file:
+        ```
+        GEMINI_API_KEY=your_api_key_here
+        ```
 
-1.  **Start the Bot**:
-    In your terminal or command prompt, from the project directory, run:
+4.  **Run the bot:**
     ```bash
     npm start
     ```
 
-2.  **Link WhatsApp**:
-    A QR code will appear in the terminal. Open WhatsApp on your phone, go to `Settings > Linked Devices > Link a Device`, and scan the QR code.
+5.  **Connect to WhatsApp:**
+    -   A QR code will appear in your terminal.
+    -   Open WhatsApp on your phone, go to `Settings > Linked Devices > Link a Device`, and scan the QR code.
+    -   The bot is now connected and ready to use.
 
-3.  **Interact with the Bot**:
-    Once the client is ready (you'll see "Client is ready!" in the terminal), you can send commands like `!ask What is AI?` or `!image A cat wearing a hat` to the WhatsApp account the bot is linked to.
+## Dependencies
 
-### Platform-Specific Notes
+-   [whatsapp-web.js](https://github.com/pedroslopez/whatsapp-web.js)
+-   [@google/generative-ai](https://www.npmjs.com/package/@google/generative-ai)
+-   [dotenv](https://www.npmjs.com/package/dotenv)
+-   [qrcode-terminal](https://www.npmjs.com/package/qrcode-terminal)
+-   [canvas](https://www.npmjs.com/package/canvas) - For adding text to sticker images.
+-   [axios](https://www.npmjs.com/package/axios) - For fetching images from URLs.
 
-#### Windows
+## License
 
-*   The general setup and running instructions should work directly.
-*   Ensure your firewall or antivirus isn't blocking Node.js or Chromium's network access.
-
-#### Linux (e.g., Ubuntu)
-
-*   The general setup and running instructions apply.
-*   **Puppeteer Dependencies**: `whatsapp-web.js` uses Puppeteer, which runs a headless Chromium instance. On headless Linux systems (like servers), you might need to install additional dependencies for Chromium to function correctly.
-
-    For Debian/Ubuntu, you may need to install libraries like:
-    ```bash
-    sudo apt-get update
-    sudo apt-get install -y \
-      gconf-service \
-      libasound2 \
-      libatk1.0-0 \
-      libc6 \
-      libcairo2 \
-      libcups2 \
-      libdbus-1-3 \
-      libexpat1 \
-      libfontconfig1 \
-      libgcc1 \
-      libgconf-2-4 \
-      libgdk-pixbuf2.0-0 \
-      libglib2.0-0 \
-      libgtk-3-0 \
-      libnspr4 \
-      libpango-1.0-0 \
-      libpangocairo-1.0-0 \
-      libstdc++6 \
-      libx11-6 \
-      libx11-xcb1 \
-      libxcb1 \
-      libxcomposite1 \
-      libxcursor1 \
-      libxdamage1 \
-      libxext6 \
-      libxfixes3 \
-      libxi6 \
-      libxrandr2 \
-      libxrender1 \
-      libxss1 \
-      libxtst6 \
-      ca-certificates \
-      fonts-liberation \
-      libappindicator1 \
-      libnss3 \
-      lsb-release \
-      xdg-utils \
-      wget \
-      --no-install-recommends
-    ```
-    The exact list can vary. Refer to the [Puppeteer troubleshooting documentation](https://pptr.dev/troubleshooting) for the most up-to-date list of dependencies if you encounter issues.
-
-*   **Puppeteer Sandbox**: The `index.js` file includes `args: ['--no-sandbox', '--disable-setuid-sandbox']` for Puppeteer. This is often necessary when running in restricted environments like Docker containers or some CI/CD systems, and can be helpful on Linux servers. If you run into issues, these flags are a good first step for troubleshooting.
+This project is licensed under the ISC License.
