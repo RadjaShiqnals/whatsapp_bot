@@ -7,7 +7,7 @@ A simple WhatsApp bot that uses Google's Gemini AI for conversational responses 
 -   **AI Chat**: Talk to the bot by mentioning it in a group or sending a direct message.
 -   **Ask Command**: Use `!ask` to get a direct answer from the Gemini Pro model.
 -   **Image Generation**: Use `!image` to generate images from text descriptions using the Gemini Pro Vision model.
--   **Sticker Creator**: Use `!sticker` to create stickers from images.
+-   **Sticker Creator**: Use `!sticker` to create stickers from images and GIFs. You can add styled text to static images.
 
 ## Commands
 
@@ -22,16 +22,18 @@ A simple WhatsApp bot that uses Google's Gemini AI for conversational responses 
     -   Generates an AI image based on the provided text prompt.
     -   Example: `!image a photo of a racoon programming a computer`
 
--   `!sticker {image_url} [text] [--options]`
-    -   Creates a sticker from a direct image URL.
-    -   If you add text, it will be placed on the image, meme-style.
-    -   **Simple Sticker**: `!sticker https://i.imgur.com/example.png`
-    -   **Sticker with Text**: `!sticker https://i.imgur.com/example.png This is my meme`
-    -   **Customized Text Sticker**: You can customize the text's color, size, and position.
+-   `!sticker [url] [text] [--size=value] [--color=value] [--pos=value]`
+    -   Creates a sticker from an image or GIF. It can use an image you send/reply to or fetch one from a direct URL.
+    -   If you add text, it will be placed on the image (static images only).
+    -   **Simple Sticker (from media)**: Send an image/GIF with the caption `!sticker`.
+    -   **Simple Sticker (from URL)**: `!sticker https://i.imgur.com/example.png`
+    -   **Sticker with Text**: Send an image with the caption `!sticker This is my meme`.
+    -   **Sticker with Text (from URL)**: `!sticker https://i.imgur.com/example.png This is my meme`
+    -   **Customized Text Sticker**: You can customize the text's font size, color, and position.
+        -   `--size`: Font size in pixels (e.g., `40`). Default is auto-sized based on image height.
         -   `--color`: Text color name or hex code (e.g., `red`, `#FFFF00`). Default is `white`.
-        -   `--size`: Font size in pixels (e.g., `40`). Default is `50`.
         -   `--pos`: Text position (`top`, `center`, `bottom`). Default is `bottom`.
-        -   Example: `!sticker {url} TOP TEXT --pos=top --color=yellow --size=45`
+        -   Example: `!sticker https://i.imgur.com/example.png TOP TEXT --size=45 --color=yellow --pos=top`
 
 -   `!help`
     -   Shows a list of all available commands.
@@ -76,6 +78,7 @@ A simple WhatsApp bot that uses Google's Gemini AI for conversational responses 
 -   [qrcode-terminal](https://www.npmjs.com/package/qrcode-terminal)
 -   [canvas](https://www.npmjs.com/package/canvas) - For adding text to sticker images.
 -   [axios](https://www.npmjs.com/package/axios) - For fetching images from URLs.
+-   [fluent-ffmpeg](https://www.npmjs.com/package/fluent-ffmpeg) - For processing animated stickers.
 
 ## License
 
